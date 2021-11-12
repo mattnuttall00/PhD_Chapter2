@@ -71,9 +71,40 @@ pals.cols.25 <- ggplot()+
 
 # The plot is too crowded with the full province names, so I will use numbers (excluding Tonle Sap) and then label the numbers in the figure caption
 prov.shp$Index <- NA
+index <- 1:24
 for(i in 1:nrow(prov.shp)){
-  prov.shp$Index[i] <- ifelse(prov.shp$KHETTRN[i]=="Tonle Sap",NA,row.names(prov.shp)[i])
+  prov.shp$Index[i] <- ifelse(prov.shp$KHETTRN[i]=="Tonle Sap",NA,index[i])
 }
+# the above is't working becasue the numbers are not consecutive because of Tonle Sap
+
+# manually assign numbers
+prov.shp$Index <- ifelse(prov.shp$KHETTRN=="Rotanak Kiri", "1", 
+                  ifelse(prov.shp$KHETTRN=="Stung Treng", "2",
+                  ifelse(prov.shp$KHETTRN=="Oddar Meanchey", "3",      
+                  ifelse(prov.shp$KHETTRN=="Preah Vihear", "4",
+                  ifelse(prov.shp$KHETTRN=="Banteay Meanchey", "5",
+                  ifelse(prov.shp$KHETTRN=="Siem Reap", "6",
+                  ifelse(prov.shp$KHETTRN=="Kampong Thom", "7",
+                  ifelse(prov.shp$KHETTRN=="Mondulkiri", "8",
+                  ifelse(prov.shp$KHETTRN=="Kratie", "9",
+                  ifelse(prov.shp$KHETTRN=="Tonle Sap", NA,
+                  ifelse(prov.shp$KHETTRN=="Kampong Chhnang", "10",
+                  ifelse(prov.shp$KHETTRN=="Pursat", "11",
+                  ifelse(prov.shp$KHETTRN=="Kampong Speu", "12",
+                  ifelse(prov.shp$KHETTRN=="Prey Veng", "13",
+                  ifelse(prov.shp$KHETTRN=="Svay Rieng", "14",
+                  ifelse(prov.shp$KHETTRN=="Takeo", "15",
+                  ifelse(prov.shp$KHETTRN=="Kampot", "16",
+                  ifelse(prov.shp$KHETTRN=="Koh Kong", "17",
+                  ifelse(prov.shp$KHETTRN=="Kep", "18",
+                  ifelse(prov.shp$KHETTRN=="Sihanouk", "19",
+                  ifelse(prov.shp$KHETTRN=="Battambang", "20",
+                  ifelse(prov.shp$KHETTRN=="Pailan", "21",
+                  ifelse(prov.shp$KHETTRN=="Kampong Cham", "22",
+                  ifelse(prov.shp$KHETTRN=="Kandal", "23",
+                  ifelse(prov.shp$KHETTRN=="Phnom Penh", "24", 
+                         NA)))))))))))))))))))))))))
+
 
 # plot with number labels
 pals.cols.25.num <- ggplot()+
@@ -81,9 +112,14 @@ pals.cols.25.num <- ggplot()+
                 geom_sf(data=prov.shp[prov.shp$KHETTRN != "Tonle Sap",], 
                         aes(group=KHETTRN, fill=KHETTRN), show.legend = F, alpha = 0.4)+
                 geom_text_repel(data=prov.shp[prov.shp$KHETTRN != "Tonle Sap",],
-                                aes(label=Index, x=lon, y=lat), size=6)+
+                                aes(label=Index, x=lon, y=lat), size=8)+
                 scale_fill_manual(values = cols25(n=24))+
-                theme(panel.background = element_rect(fill = 'white'))
+                theme(panel.background = element_rect(fill = 'white'),
+                      axis.title = element_blank(),
+                      axis.text = element_text(size=12))
+
+ggsave("Figures/Fig_1_numbers.png", pals.cols.25.num,
+       height=25, width = 25, unit="cm", dpi=300)
 
 # plot with legend
 pals.cols.25.leg <- ggplot()+

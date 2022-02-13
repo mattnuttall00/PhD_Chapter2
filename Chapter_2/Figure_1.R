@@ -3,6 +3,7 @@ library(sf)
 library(viridis)
 library(ggrepel)
 library(pals)
+library(ggsn)
 
 # load in cambodia shapefile
 country.shp <- st_read('Spatial_data/Country Boundary.shp')
@@ -116,10 +117,17 @@ pals.cols.25.num <- ggplot()+
                 scale_fill_manual(values = cols25(n=24))+
                 theme(panel.background = element_rect(fill = 'white'),
                       axis.title = element_blank(),
-                      axis.text = element_text(size=12))
+                      axis.text = element_text(size=12))+
+                scalebar(prov.shp, location = "bottomright", dist=50, dist_unit="km", transform=FALSE,
+                         model = "WGS84")
 
-ggsave("Figures/Fig_1_numbers.png", pals.cols.25.num,
+ggsave("Figures/Fig_1_numbers_scalebar.png", pals.cols.25.num,
        height=25, width = 25, unit="cm", dpi=300)
+
+
+
+
+
 
 # plot with legend
 pals.cols.25.leg <- ggplot()+
